@@ -1,12 +1,20 @@
 ---
 import { getTrainings } from "@/api";
+import TrainingCard from "@/components/trainings/training-card.astro";
 import Layout from "@/layout/layout.astro";
 
 const trainings = await getTrainings();
 ---
 
 <Layout title="Campus">
-	<h1 class="text-gray-800 px-16 py-16 text-2xl">Cursos Disponibles</h1>
+	<div class="container mx-auto px-4">
+		<h1 class="text-gray-800 px-16 py-16 text-2xl">Cursos Disponibles</h1>
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+		{trainings.map((training) => <TrainingCard training={training} />)}
+		</div>
+  	</div>
+
+	<h1 class="text-gray-800 px-4 pt-8 text-2xl font-bold mb-4">Info adicional de los cursos</h1>
 	<ul class="flex flex-col gap-4 items-center">
 		{
 			trainings.map((training) =>
