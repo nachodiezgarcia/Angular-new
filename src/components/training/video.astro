@@ -1,0 +1,12 @@
+---
+export interface Props {
+    videoUrl: string,
+    title: string
+}
+const {videoUrl, title} = Astro.props;
+---
+
+<div class="aspect-video shadow-lg w-full border border-[#BFA888] overflow-hidden hover:shadow-2xl hover:border-[#00A3B3]">
+    <iframe id="videoIframe" src={ videoUrl } class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen />
+</div>
+<h2 id="lessonTitle" class="mt-4 text-2xl font-bold">{ title }</h2>

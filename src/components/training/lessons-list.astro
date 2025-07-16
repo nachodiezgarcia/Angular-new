@@ -1,0 +1,23 @@
+---
+import type { Lesson } from '@/api'
+
+export interface Props {
+    lessons: Lesson[];
+    trainingSlug: string;
+    currentlessonSlug: string;
+}
+const { lessons, trainingSlug, currentlessonSlug } = Astro.props;
+---
+
+<div class="transition duration-300 bg-[#459f92] hover:bg-[#3C8A65] font-bold rounded-2xl h-[465px] scroll-auto">
+    <h3 class="text-[#CAE00F] text-2xl pb-8 p-8">Lessons</h3>
+    <div class="flex flex-col gap-5 p-2">
+    {
+        lessons.map((lesson) =>
+        <a href={`/training/${trainingSlug}/${lesson.slug}`}
+        class={`transition duration-300 text-[#006e61] hover:text-[#004c43] rounded-[15px] pl-8 p-2 hover:border-b-4 ${lesson.slug === currentlessonSlug ? "bg-[#bfa888] hover:bg-[#d2baa0]": "bg-[#f2fedc] hover:bg-[#e0f5c0]"}`}
+        >{ lesson.title }</a>
+    )
+    }
+    </div>
+</div>

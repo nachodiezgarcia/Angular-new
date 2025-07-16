@@ -1,0 +1,58 @@
+---
+import { getTrainings } from "@/api";
+import FooterVid from "@/components/footerVid.astro";
+import LessonsContent from "@/components/training/lessons-content.astro";
+import LessonsList from "@/components/training/lessons-list.astro";
+import Video from "@/components/training/video.astro";
+import Layout from "@/layout/layout.astro";
+export async function getStaticPaths() {
+    const trainings = await getTrainings();
+    return trainings.flatMap((training) =>
+        training.lessons.map((lesson) => ({
+            params: {
+                trainingSlug: training.slug,
+                lessonSlug: lesson.slug
+            },
+            props: { training }
+        })
+    ));
+}
+const training = Astro.props;
+const currentLesson = training.training.lessons.find(
+    (lesson) => lesson.slug === Astro.params.lessonSlug);
+---
+
+<Layout title={ `${training.training.title} - ${currentLesson?.title}`}>
+    <div class="max-w-7xl mx-auto">
+        <div class="bg-[#CAE00F] flex flex-row">
+            <p class=" text-gray-800 font-bold container mx-auto px-4 pt-4">Aprendiendo con Lemon</p>
+            <img class="w-[60px] bg-amber-50" src="/assets/lemonCodeLogo.png" alt="Lemoncode">
+        </div>
+        <div class="px-4 py-8">
+        <h1 class="text-4xl font-bold mb-8 text-center">{training.training.title}</h1>
+        <div class="grid md:grid-cols-12 gap-6">
+            <div class="md:col-span-8">
+            <Video
+                videoUrl={currentLesson?.video ?? ""}
+                title={currentLesson?.title ?? ""}
+            />
+            </div>
+
+            <div class="md:col-span-4">
+            <LessonsList
+                lessons={training?.training?.lessons}
+                trainingSlug={training?.training?.slug}
+                currentlessonSlug={currentLesson!.slug}
+            />
+            </div>
+        </div>
+
+        <div
+            class="mt-10 bg-white p-6 rounded-2xl shadow-md border border-gray-200"
+        >
+            <LessonsContent content={currentLesson?.content ?? ""} />
+        </div>
+        </div>
+        <FooterVid></FooterVid>
+    </div>
+</Layout>
