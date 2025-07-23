@@ -1,10 +1,41 @@
 ---
+import { marked } from 'marked';
+import hljs from 'highlight.js';
+import sanitizeHtml from 'sanitize-html';
 export interface Props {
     content: string;
 }
 const { content } = Astro.props;
+const dangerousHtmlContent = await marked(content);
+
+const htmlContent = sanitizeHtml(dangerousHtmlContent, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+    "pre", // Allow for multiline block code
+    "code", // Allow inline code
+    "span", // Used by highlight.js to color keyword, comments...
+    ]),
+    allowedAttributes: {
+    ...sanitizeHtml.defaults.allowedAttributes, // Default allowed attributes
+    "*": ["class"], // Allow class in all element (used by hljs)
+    },
+});
+
+const renderer = new marked.Renderer();
+
+renderer.code = ({ text, lang }) => {
+const validLang = hljs.getLanguage(lang || 'plaintext') ? lang || 'plaintext' : 'plaintext';
+const highlighted = hljs.highlight(text, { language: validLang }).value;
+return `<br /><pre><code class="hljs ${validLang}">${highlighted}</code></pre>`;
+};
+marked.setOptions({ renderer });
 ---
-<div class="bg-[#CAE00F] text-[#1B3D2F] p-4 rounded-t-[10px] text-justify font-bold">
+<div class="bg-white text-[#1B3D2F] p-4 rounded-t-[10px] text-justify font-bold">
     <h3 class="text-2xl">Contenido de la lección</h3>
-    <p id="lessonContent">{ content }</p>
+    <div class="markdown-content" set:html={htmlContent} />
 </div>
+
+<style>
+  :global(.markdown-content p) {
+    margin-bottom: 1em;
+  }
+</style>
