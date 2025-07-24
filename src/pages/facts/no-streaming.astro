@@ -1,0 +1,29 @@
+---
+import { getCatFact } from "@/api/cat-fact.api";
+import { getDogFact } from "@/api/dog-fact.api";
+import Layout from "@/layout/layout.astro";
+
+export const prerender = false;
+
+const catFacts = await getCatFact;
+const dogFacts = await getDogFact;
+---
+
+<Layout title="No streaming">
+    <h1 class="text-gray-900 border-[#CAE00F] border-b-4 p-8 font-bold">No streaming</h1>
+    <div class="flex flex-row h-[79.4vh] flex-wrap md:flex-nowrap">
+        <div class="flex flex-col gap-10 p-10 md:p-20">
+            <div class="bg-gray-900 text-white rounded-full p-3 block w-100 text-center font-bold">
+                <h2>Cat facts</h2>
+                <p>{ catFacts }</p>
+            </div>
+            <div class="bg-gray-900 text-white rounded-full p-3 block w-100 text-center font-bold">
+                <h2>Dog facts</h2>
+                <p>{ dogFacts }</p>
+            </div>
+        </div>
+        <div class="bg-[#459f92] w-full flex justify-center items-center">
+                <a href="https://github.com/Lemoncode"><img class="h-50" src="/assets/lemoncodeCode.png" alt="lemoncodeLogoFresh"></a>
+        </div>   
+    </div>
+</Layout>

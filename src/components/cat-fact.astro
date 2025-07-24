@@ -1,0 +1,10 @@
+---
+import { getCatFact } from "@/api/cat-fact.api"
+const catFacts = await getCatFact;
+---
+
+
+<section>
+    <h2>Cat facts</h2>
+    <p>{ catFacts }</p>
+</section>
